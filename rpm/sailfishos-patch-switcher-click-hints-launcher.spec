@@ -1,7 +1,7 @@
 Name: sailfishos-patch-switcher-click-hints-launcher
 BuildArch: noarch
 Summary: Click on switcher always shows the top four applications of the launcher
-Version: 0.0.1
+Version: 0.0.2
 Release: 1
 Group: System/Patches
 License: TODO
