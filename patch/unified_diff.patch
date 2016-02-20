@@ -1,0 +1,55 @@
+diff --git a/usr/share/lipstick-jolla-home-qt5/main.qml b/usr/share/lipstick-jolla-home-qt5/main.qml
+index dae52cc..9b9c1b3 100644
+--- a/usr/share/lipstick-jolla-home-qt5/main.qml
++++ b/usr/share/lipstick-jolla-home-qt5/main.qml
+@@ -100,22 +100,9 @@ ApplicationWindow {
+             onTriggered: Lipstick.compositor.launcherHinting = true
+         }
+ 
+-        MouseArea {
++        Switcher {
++            id: switcher
+             anchors.fill: parent
+-
+-            enabled: switcher.count == 0 && Lipstick.compositor.systemInitComplete
+-            drag.filterChildren: true
+-
+-            onClicked: {
+-                if (enabled) {
+-                    Lipstick.compositor.launcherHinting = true
+-                }
+-            }
+-
+-            Switcher {
+-                id: switcher
+-                anchors.fill: parent
+-            }
+         }
+ 
+         Binding {
+diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
+index 410f9ab..e65d027 100644
+--- a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
++++ b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
+@@ -553,6 +553,8 @@ SilicaFlickable {
+ 
+             if (switcherRoot.closeApplicationEnabled && !switcherRoot.housekeepingMenuActive)
+                 switcherRoot.closeApplicationEnabled = false;
++            else if (Lipstick.compositor.systemInitComplete)
++                Lipstick.compositor.launcherHinting = true
+         }
+ 
+         function adjustOOMScores() {
+diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml b/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
+index 1d0f0f0..b8a7a20 100644
+--- a/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
++++ b/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
+@@ -155,6 +155,8 @@ EditableGridDelegate {
+             switcherRoot.launchingItem = wrapper
+             launcherItem.launchApplication()
+         }
++
++        Lipstick.compositor.launcherHinting = false
+     }
+ 
+     onPressAndHold: switcherRoot.closeApplicationEnabled = true

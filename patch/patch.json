@@ -1,0 +1,8 @@
+{
+    "name": "Switcher click hints Launcher",
+    "description": "Click on switcher always shows the top four applications of the launcher",
+    "category": "homescreen",
+    "infos": {
+        "maintainer": "cornerman"
+    }
+}
