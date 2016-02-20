@@ -28,10 +28,18 @@ index dae52cc..9b9c1b3 100644
  
          Binding {
 diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
-index 410f9ab..e65d027 100644
+index 410f9ab..4d9084b 100644
 --- a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
 +++ b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
-@@ -553,6 +553,8 @@ SilicaFlickable {
+@@ -538,6 +538,7 @@ SilicaFlickable {
+             skipOnReleased = true
+ 
+             switcherRoot.minimizeLaunchingWindows()
++            Lipstick.compositor.launcherHinting = false
+         }
+ 
+         onPressed: {
+@@ -553,6 +554,8 @@ SilicaFlickable {
  
              if (switcherRoot.closeApplicationEnabled && !switcherRoot.housekeepingMenuActive)
                  switcherRoot.closeApplicationEnabled = false;
@@ -41,7 +49,7 @@ index 410f9ab..e65d027 100644
  
          function adjustOOMScores() {
 diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml b/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
-index 1d0f0f0..b8a7a20 100644
+index 1d0f0f0..c88bf00 100644
 --- a/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
 +++ b/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
 @@ -155,6 +155,8 @@ EditableGridDelegate {
@@ -53,3 +61,15 @@ index 1d0f0f0..b8a7a20 100644
      }
  
      onPressAndHold: switcherRoot.closeApplicationEnabled = true
+@@ -342,7 +344,10 @@ EditableGridDelegate {
+                             Behavior on opacity { FadeAnimation {} }
+                         }
+ 
+-                        onClicked: coverActionModel.trigger(model.id)
++                        onClicked: {
++                            coverActionModel.trigger(model.id)
++                            Lipstick.compositor.launcherHinting = false
++                        }
+                     }
+                 }
+             }
