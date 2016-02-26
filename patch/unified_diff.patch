@@ -10,28 +10,6 @@ index 1a8e7a5..d8a3153 100644
                      root._homeLayerOnPeek = homeLayerItem.switcher
                      homeLayerItem.setCurrentItem(homeLayerItem.switcher, root.homeVisible)
                      if (!lockScreenLayer.active) {
-diff --git a/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml b/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml
-index 26e0dfd..94c81e8 100644
---- a/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml
-+++ b/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml
-@@ -224,7 +224,7 @@ Layer {
-             id: hintShowAnimation
-             target: edgeLayer
-             property: "_hintProgress"
--            duration: 300
-+            duration: 200
-             to: Theme.iconSizeLauncher * 2
-             easing.type: Easing.InOutQuad
-         }
-@@ -232,7 +232,7 @@ Layer {
-         NumberAnimation {
-             target: edgeLayer
-             property: "_hintProgress"
--            duration: 300
-+            duration: 200
-             to: 0
-             easing.type: Easing.InOutQuad
-         }
 diff --git a/usr/share/lipstick-jolla-home-qt5/main.qml b/usr/share/lipstick-jolla-home-qt5/main.qml
 index dae52cc..9b9c1b3 100644
 --- a/usr/share/lipstick-jolla-home-qt5/main.qml
