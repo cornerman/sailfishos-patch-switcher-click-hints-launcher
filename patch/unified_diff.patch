@@ -1,3 +1,37 @@
+diff --git a/usr/share/lipstick-jolla-home-qt5/compositor.qml b/usr/share/lipstick-jolla-home-qt5/compositor.qml
+index 1a8e7a5..d8a3153 100644
+--- a/usr/share/lipstick-jolla-home-qt5/compositor.qml
++++ b/usr/share/lipstick-jolla-home-qt5/compositor.qml
+@@ -597,6 +597,7 @@ Compositor {
+                 peekFilter.topEnabled: Desktop.settings.close_from_top
+ 
+                 onAboutToShowWindow: {
++                    root.launcherHinting = false
+                     root._homeLayerOnPeek = homeLayerItem.switcher
+                     homeLayerItem.setCurrentItem(homeLayerItem.switcher, root.homeVisible)
+                     if (!lockScreenLayer.active) {
+diff --git a/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml b/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml
+index 26e0dfd..94c81e8 100644
+--- a/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml
++++ b/usr/share/lipstick-jolla-home-qt5/layers/EdgeLayer.qml
+@@ -224,7 +224,7 @@ Layer {
+             id: hintShowAnimation
+             target: edgeLayer
+             property: "_hintProgress"
+-            duration: 300
++            duration: 200
+             to: Theme.iconSizeLauncher * 2
+             easing.type: Easing.InOutQuad
+         }
+@@ -232,7 +232,7 @@ Layer {
+         NumberAnimation {
+             target: edgeLayer
+             property: "_hintProgress"
+-            duration: 300
++            duration: 200
+             to: 0
+             easing.type: Easing.InOutQuad
+         }
 diff --git a/usr/share/lipstick-jolla-home-qt5/main.qml b/usr/share/lipstick-jolla-home-qt5/main.qml
 index dae52cc..9b9c1b3 100644
 --- a/usr/share/lipstick-jolla-home-qt5/main.qml
@@ -28,48 +62,26 @@ index dae52cc..9b9c1b3 100644
  
          Binding {
 diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
-index 410f9ab..4d9084b 100644
+index 410f9ab..495f4b7 100644
 --- a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
 +++ b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
-@@ -538,6 +538,7 @@ SilicaFlickable {
-             skipOnReleased = true
- 
-             switcherRoot.minimizeLaunchingWindows()
+@@ -52,6 +52,8 @@ SilicaFlickable {
+     onCloseApplicationEnabledChanged: {
+         minimizeLaunchingWindows()
+         switcherGrid.updateColumns()
++        if (closeApplicationEnabled)
 +            Lipstick.compositor.launcherHinting = false
-         }
+     }
  
-         onPressed: {
-@@ -553,6 +554,8 @@ SilicaFlickable {
+     function minimizeLaunchingWindows() {
+@@ -553,6 +555,10 @@ SilicaFlickable {
  
              if (switcherRoot.closeApplicationEnabled && !switcherRoot.housekeepingMenuActive)
                  switcherRoot.closeApplicationEnabled = false;
-+            else if (Lipstick.compositor.systemInitComplete)
++            else if (Lipstick.compositor.systemInitComplete) {
++                switcherRoot.minimizeLaunchingWindows()
 +                Lipstick.compositor.launcherHinting = true
++            }
          }
  
          function adjustOOMScores() {
-diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml b/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
-index 1d0f0f0..c88bf00 100644
---- a/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
-+++ b/usr/share/lipstick-jolla-home-qt5/switcher/SwitcherItem.qml
-@@ -155,6 +155,8 @@ EditableGridDelegate {
-             switcherRoot.launchingItem = wrapper
-             launcherItem.launchApplication()
-         }
-+
-+        Lipstick.compositor.launcherHinting = false
-     }
- 
-     onPressAndHold: switcherRoot.closeApplicationEnabled = true
-@@ -342,7 +344,10 @@ EditableGridDelegate {
-                             Behavior on opacity { FadeAnimation {} }
-                         }
- 
--                        onClicked: coverActionModel.trigger(model.id)
-+                        onClicked: {
-+                            coverActionModel.trigger(model.id)
-+                            Lipstick.compositor.launcherHinting = false
-+                        }
-                     }
-                 }
-             }
