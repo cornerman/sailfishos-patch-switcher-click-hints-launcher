@@ -1,49 +1,41 @@
 diff --git a/usr/share/lipstick-jolla-home-qt5/compositor.qml b/usr/share/lipstick-jolla-home-qt5/compositor.qml
-index 1a8e7a5..d8a3153 100644
+index 2a3c9cc..18abbb3 100644
 --- a/usr/share/lipstick-jolla-home-qt5/compositor.qml
 +++ b/usr/share/lipstick-jolla-home-qt5/compositor.qml
-@@ -597,6 +597,7 @@ Compositor {
-                 peekFilter.topEnabled: Desktop.settings.close_from_top
+@@ -688,6 +688,7 @@ Compositor {
+                 }
  
                  onAboutToShowWindow: {
 +                    root.launcherHinting = false
-                     root._homeLayerOnPeek = homeLayerItem.switcher
+                     root.showApplicationOverLockscreen = Desktop.startupWizardRunning
+                     homeLayerItem.lastActiveLayer = homeLayerItem.switcher
                      homeLayerItem.setCurrentItem(homeLayerItem.switcher, root.homeVisible)
-                     if (!lockScreenLayer.active) {
 diff --git a/usr/share/lipstick-jolla-home-qt5/main.qml b/usr/share/lipstick-jolla-home-qt5/main.qml
-index dae52cc..9b9c1b3 100644
+index 3e570ca..87a9cd7 100644
 --- a/usr/share/lipstick-jolla-home-qt5/main.qml
 +++ b/usr/share/lipstick-jolla-home-qt5/main.qml
-@@ -100,22 +100,9 @@ ApplicationWindow {
-             onTriggered: Lipstick.compositor.launcherHinting = true
-         }
- 
--        MouseArea {
-+        Switcher {
-+            id: switcher
+@@ -105,15 +105,9 @@ ApplicationWindow {
+             objectName: "main"
              anchors.fill: parent
--
+ 
 -            enabled: switcher.count == 0 && Lipstick.compositor.systemInitComplete
--            drag.filterChildren: true
--
++            enabled: false
+             drag.filterChildren: true
+ 
 -            onClicked: {
 -                if (enabled) {
 -                    Lipstick.compositor.launcherHinting = true
 -                }
 -            }
 -
--            Switcher {
--                id: switcher
--                anchors.fill: parent
--            }
-         }
- 
-         Binding {
+             Switcher {
+                 id: switcher
+                 anchors.fill: parent
 diff --git a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
-index 410f9ab..495f4b7 100644
+index 86a9624..798837b 100644
 --- a/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
 +++ b/usr/share/lipstick-jolla-home-qt5/switcher/Switcher.qml
-@@ -52,6 +52,8 @@ SilicaFlickable {
+@@ -53,6 +53,8 @@ SilicaFlickable {
      onCloseApplicationEnabledChanged: {
          minimizeLaunchingWindows()
          switcherGrid.updateColumns()
@@ -52,7 +44,7 @@ index 410f9ab..495f4b7 100644
      }
  
      function minimizeLaunchingWindows() {
-@@ -553,6 +555,10 @@ SilicaFlickable {
+@@ -588,6 +590,10 @@ SilicaFlickable {
  
              if (switcherRoot.closeApplicationEnabled && !switcherRoot.housekeepingMenuActive)
                  switcherRoot.closeApplicationEnabled = false;
